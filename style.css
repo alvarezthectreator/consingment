@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CADENCE — premium logistics
+  MOVERE — premium logistics
    Sections: 1 Tokens · 2 Base · 3 Hero · 4 Navigation · 5 Why Choose Us
              6 Tablet · 7 Mobile · 8 Shared · 9 Trusted · 10 Insights
              11 Testimonials · 12 Footer · 13 Responsive (new sections)
@@ -445,6 +445,72 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--text-muted);
 }
 
+.about {
+  padding: clamp(56px, 8vw, 104px) var(--gutter);
+  background: #F4F6F4;
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 7vw, 96px);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.about__heading h2 {
+  max-width: 13ch;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.12;
+  color: var(--text);
+}
+
+.about__content {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: .88rem;
+  line-height: 1.65;
+}
+
+.about__lead {
+  max-width: 58ch;
+  color: var(--text);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.5;
+}
+
+.about__pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 26px);
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about__pillars li {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+}
+
+.about__pillars strong {
+  color: var(--text);
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.about__pillars span {
+  font-size: .72rem;
+  line-height: 1.5;
+}
+
 /* 6. TABLET ---------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .hero { aspect-ratio: 1238 / 940; min-height: 600px; }
@@ -485,10 +551,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .nav__mobile-only { display: block; }
   .nav__links .btn-pill { display: block; text-align: center; padding: 13px 20px; }
 
-  .hero { aspect-ratio: auto; min-height: 560px; height: 118vw; max-height: 760px; }
-  .hero__slide { background-position: center top; }
-  .hero__content { top: 9%; }
-  .hero__title { font-size: clamp(1.05rem, 3vw, 1.35rem); }
+  .hero {
+    aspect-ratio: auto;
+    height: min(94svh, 820px);
+    min-height: min(620px, calc(100svh - 40px));
+    max-height: 820px;
+  }
+  .hero__slide { background-position: center 62%; }
+  .hero__slide--container {
+    background-image: url("Semi-truck_driving_with_typography_db6da25f_2K.jpg");
+  }
+  .hero__slide--equipment {
+    background-image: url("Semi-truck_driving_with_typography_5c9ce57a_2K.jpg");
+  }
+  .hero__content { top: 12%; }
+  .hero__title {
+    max-width: 100%;
+    font-size: clamp(1.15rem, 5vw, 1.55rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .hero__content .cta {
+    gap: 16px;
+    margin-top: clamp(18px, 4vw, 26px);
+    padding: 7px 7px 7px 24px;
+    font-size: .95rem;
+  }
+  .hero__content .cta__icon { width: 42px; height: 42px; }
   .hero__word { top: 46%; font-size: 23.2vw; }
   .hero__controls { top: auto; bottom: 18px; }
   .hero__arrow { width: 36px; height: 36px; }
@@ -498,6 +587,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .why__inner { grid-template-columns: 1fr; gap: 40px; }
   .why__text { gap: 40px; }
   .testimonial { left: 14px; bottom: 14px; width: calc(100% - 28px); max-width: 360px; }
+  .about__inner { grid-template-columns: 1fr; gap: 28px; }
+  .about__heading h2 { max-width: 19ch; }
+  .about__pillars { grid-template-columns: 1fr; gap: 14px; }
 }
 
 @media (max-width: 460px) {
