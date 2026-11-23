@@ -8,6 +8,17 @@
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     links.classList.toggle('is-open', open);
+    if (open) {
+      links.style.setProperty('visibility', 'visible', 'important');
+      links.style.setProperty('opacity', '1', 'important');
+      links.style.setProperty('transform', 'none', 'important');
+      links.style.setProperty('transition', 'none', 'important');
+    } else {
+      links.style.setProperty('visibility', 'hidden', 'important');
+      links.style.setProperty('opacity', '0', 'important');
+      links.style.setProperty('transform', 'translateY(-8px)', 'important');
+      links.style.removeProperty('transition');
+    }
   }
 
   burger.addEventListener('click', function () {
@@ -86,4 +97,23 @@
 
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
+})();
+
+// Hero shipment tracking form
+(function () {
+  var form = document.getElementById('tracking-form');
+  var input = document.getElementById('tracking-code');
+  var status = document.getElementById('tracking-status');
+  if (!form || !input || !status) return;
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var code = input.value.trim();
+    if (!code) {
+      status.textContent = 'Please enter a tracking code.';
+      input.focus();
+      return;
+    }
+    status.textContent = 'Tracking "' + code + '". Shipment details will appear here.';
+  });
 })();
