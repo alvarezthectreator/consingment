@@ -114,6 +114,6 @@
       input.focus();
       return;
     }
-    status.textContent = 'Tracking "' + code + '". Shipment details will appear here.';
+    window.location.href = 'tracking.html?code=' + encodeURIComponent(code);
   });
 })();

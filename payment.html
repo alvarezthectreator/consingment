@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Movere — Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brown:#E0BD91;--green:#35b27a;--text:#171717}*{box-sizing:border-box}body{margin:0;font-family:Manrope,system-ui,sans-serif;background:#ebe7e3;color:var(--text)}.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(250,248,245,.94);border-bottom:1px solid rgba(224,189,145,.08)}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:700}.brand__mark{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--brown);color:white}.back{height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;border:1px solid #ddd5ce;border-radius:999px;text-decoration:none;color:var(--text);background:white;font-size:12px;font-weight:700}.page{min-height:calc(100svh - 72px);display:grid;place-items:center;padding:28px 16px}.checkout{width:min(520px,100%);padding:22px;border:1px solid rgba(224,189,145,.08);border-radius:24px;background:rgba(255,255,255,.92);box-shadow:0 18px 50px rgba(74,62,51,.10)}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#98918b}.checkout h1{margin:8px 0 20px;font-size:28px;letter-spacing:-.04em}.amount{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px;padding:16px;border-radius:16px;background:#f5f2ef}.amount span{font-size:11px;color:#98918b}.amount strong{display:block;margin-top:3px;font-size:24px}.methods{display:grid;gap:10px}.method{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:1px solid #e8e2dc;border-radius:16px;background:white;text-align:left;color:var(--text);font:inherit;cursor:pointer}.method.is-active{border-color:var(--brown);box-shadow:0 0 0 2px rgba(224,189,145,.08)}.method__icon{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:#E0BD91;color:white;font-weight:800}.method div{display:grid;gap:2px}.method strong{font-size:13px}.method span{font-size:11px;color:#98918b}.method__check{margin-left:auto;width:18px;height:18px;border:1px solid #ddd5ce;border-radius:50%;position:relative}.method.is-active .method__check{border:5px solid var(--brown)}.pay-button{width:100%;height:52px;margin-top:14px;border:0;border-radius:14px;background:var(--brown);color:white;font:inherit;font-size:13px;font-weight:700}.status{min-height:20px;margin:12px 0 0;text-align:center;font-size:12px;color:#98918b}@media(max-width:768px){.topbar{height:64px;padding:0 14px}.back{width:42px;padding:0}.back span{display:none}.page{min-height:calc(100svh - 64px);align-content:start;padding-top:18px}.checkout{border-radius:20px;padding:16px}.checkout h1{font-size:24px}}
+</style>
+</head>
+<body><header class="topbar"><a class="brand" href="tracking.html"><span class="brand__mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></span>Movere</a><a class="back" href="tracking.html">← <span>Back to tracking</span></a></header>
+<main class="page"><section class="checkout"><p class="eyebrow">Secure checkout</p><h1>Complete payment</h1><div class="amount"><div><span>Shipment</span><strong>NP 421 2441 5551</strong></div><div><span>Amount due</span><strong>$250.00</strong></div></div>
+<div class="methods" role="radiogroup" aria-label="Payment method"><button class="method is-active" type="button" role="radio" aria-checked="true"><span class="method__icon">₿</span><div><strong>Crypto</strong><span>Bitcoin, Ethereum, USDT</span></div><span class="method__check"></span></button><button class="method" type="button" role="radio" aria-checked="false"><span class="method__icon">B</span><div><strong>Bank transfer</strong><span>Direct bank payment</span></div><span class="method__check"></span></button><button class="method" type="button" role="radio" aria-checked="false"><span class="method__icon">C</span><div><strong>Card</strong><span>Visa, Mastercard, American Express</span></div><span class="method__check"></span></button></div><button class="pay-button" id="pay-button" type="button">Continue to payment</button><p class="status" id="pay-status" role="status"></p></section></main>
+<script>
+(function(){
+  var methodList=document.querySelector('.methods');
+  var button=document.getElementById('pay-button');
+  var status=document.getElementById('pay-status');
+  if(!methodList||!button||!status)return;
+  var selected=null;
+  var icons={crypto:'₿',bank:'B',card:'C'};
+  methodList.replaceChildren();
+
+  function showMessage(message){status.textContent=message}
+  function selectMethod(method,element){
+    methodList.querySelectorAll('.method').forEach(function(item){
+      item.classList.remove('is-active');
+      item.setAttribute('aria-checked','false');
+    });
+    element.classList.add('is-active');
+    element.setAttribute('aria-checked','true');
+    selected=method;
+    showMessage('');
+  }
+
+  fetch('payment-config.php').then(function(response){
+    return response.json().then(function(data){
+      if(!response.ok)throw new Error(data.error||'Payment options are unavailable.');
+      return data;
+    });
+  }).then(function(data){
+    methodList.replaceChildren();
+    if(!Array.isArray(data.methods)||data.methods.length===0){
+      showMessage('Payment methods are not configured. Please contact support.');
+      return;
+    }
+    data.methods.forEach(function(method,index){
+      var option=document.createElement('button');
+      option.className='method'+(index===0?' is-active':'');
+      option.type='button';option.setAttribute('role','radio');option.setAttribute('aria-checked',index===0?'true':'false');
+      var icon=document.createElement('span');icon.className='method__icon';icon.textContent=icons[method.method_key]||'P';
+      var copy=document.createElement('div');
+      var name=document.createElement('strong');name.textContent=method.display_name;
+      var description=document.createElement('span');description.textContent=method.description;
+      copy.append(name,description);
+      var check=document.createElement('span');check.className='method__check';
+      option.append(icon,copy,check);
+      option.addEventListener('click',function(){selectMethod(method,option)});
+      methodList.append(option);
+      if(index===0)selected=method;
+    });
+  }).catch(function(error){
+    methodList.replaceChildren();
+    showMessage(error.message||'Payment options are unavailable. Please contact support.');
+  });
+
+  button.addEventListener('click',function(){
+    if(!selected){showMessage('Payment methods are not configured. Please contact support.');return}
+    if(selected.checkout_url){window.location.assign(selected.checkout_url);return}
+    showMessage(selected.payment_details||'Payment instructions are not available. Please contact support.');
+  });
+})();
+</script>
+</body></html>

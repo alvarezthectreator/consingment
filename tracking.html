@@ -1,22 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tracking — Movere</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="mobile-overrides.css"><link rel="stylesheet" href="pages.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movere – Shipment Tracking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Doto:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{color-scheme:light;--bg:#e4e4e4;--ink:#1c1c1c;--mute:#a3a3a3;--red:#d8372c;--green:#35b27a;--orange:#ee7b45}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);
+ background:radial-gradient(ellipse 600px 300px at 50% 28%,#e3c9c9 0,transparent 70%),var(--bg)}
+#stage{position:fixed;left:0;top:0;width:1990px;height:1244px;transform-origin:0 0;overflow:hidden}
+.wrap{position:absolute;width:1990px;pointer-events:none}.wrap>*{pointer-events:auto}
+.abs{position:absolute}
+.lbl{color:var(--mute);font-size:16px}
+.val{font-size:17px}
+.dot{font-family:'Doto','Courier New',monospace;font-weight:700}
+.pill{background:rgba(255,255,255,.75);box-shadow:0 2px 10px rgba(0,0,0,.06);border-radius:999px}
+.dots{background-image:radial-gradient(#b9b9b9 1.4px,transparent 1.6px);background-size:6px 6px}
+.ic{width:24px;height:24px;fill:none;stroke:#222;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.t{font-size:17px;fill:#555;font-family:'Plus Jakarta Sans',sans-serif}
+.tr{fill:#9aa}
+@keyframes mobile-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes status-pulse{0%,100%{box-shadow:0 0 0 0 rgba(53,178,122,.28)}50%{box-shadow:0 0 0 8px rgba(53,178,122,0)}}
+@media(max-width:768px){
+ html,body{height:auto!important;min-height:100%;overflow-x:hidden!important;overflow-y:auto!important}
+ body{background:#ebe7e3}
+ #stage{position:relative!important;width:100%!important;height:1760px!important;min-height:1540px;transform:none!important;overflow:hidden!important;background:linear-gradient(180deg,#faf9f7 0,#f4f1ee 58%,#ece7e2 100%)!important}
+ .tracking-header-actions,.tracking-header-pattern,.tracking-sidebar,.tracking-parcel,.tracking-map-controls,.tracking-truck-wrap,.tracking-chat-wrap{display:none!important}
+ .tracking-logo{left:16px!important;top:18px!important;width:48px!important;height:48px!important;border-radius:15px!important;background:#E0BD91!important;box-shadow:0 10px 24px rgba(224,189,145,.18)!important}
+ .tracking-logo svg{width:30px!important;height:30px!important}
+ .tracking-country{left:76px!important;top:19px!important;font-size:12px!important;color:#9a9692!important}
+ .tracking-brand{left:76px!important;top:38px!important;font-size:23px!important;line-height:28px!important;font-weight:600!important}
+ .tracking-status{left:16px!important;top:92px!important;font-size:12px!important;font-weight:600!important;padding:7px 11px!important;border:1px solid rgba(53,178,122,.16)!important;box-shadow:0 6px 18px rgba(53,178,122,.08)!important;animation:status-pulse 2.4s ease-in-out infinite}
+ .tracking-number{left:16px!important;top:128px!important;width:calc(100% - 32px)!important;font-size:clamp(24px,7vw,30px)!important;line-height:1.2!important;letter-spacing:-1px!important;white-space:nowrap!important}
+ .tracking-id{left:16px!important;top:173px!important;width:calc(100% - 32px)!important;font-size:13px!important;word-break:break-all!important}
+ .tracking-id~svg{display:none!important}
+ .tracking-status-flow,.tracking-status-title{display:none!important}
+ .tracking-time-label,.tracking-time-value,.tracking-courier-label,.tracking-courier-badge,.tracking-courier-value,.tracking-address-label,.tracking-address-value,.tracking-item-label,.tracking-item-value,.tracking-status,.tracking-number,.tracking-id,.tracking-id~svg{display:none!important}
+ .tracking-time-label,.tracking-time-value,.tracking-courier-label,.tracking-courier-badge,.tracking-courier-value,.tracking-address-label,.tracking-address-value,.tracking-item-label,.tracking-item-value{position:absolute!important;left:16px!important;right:auto!important}
+ .tracking-time-label{top:222px!important}.tracking-time-value{top:244px!important}
+ .tracking-courier-label{top:222px!important;left:210px!important}.tracking-courier-badge{top:244px!important;left:210px!important}.tracking-courier-value{top:244px!important;left:238px!important}
+ .tracking-address-label{top:290px!important}.tracking-address-value{top:312px!important;width:358px!important;max-width:calc(100vw - 32px)!important;font-size:14px!important;line-height:1.55!important}
+ .tracking-item-label{top:372px!important}.tracking-item-value{top:394px!important;width:358px!important;max-width:calc(100vw - 32px)!important;font-size:14px!important}
+ .tracking-time-label,.tracking-courier-label,.tracking-address-label,.tracking-item-label{font-size:11px!important;letter-spacing:.02em!important;text-transform:uppercase!important}
+ .mobile-summary-card{display:block!important;position:absolute!important;left:16px!important;right:16px!important;top:92px!important;margin:0!important;padding:20px!important;border:1px solid rgba(100,92,86,.09)!important;border-radius:20px!important;background:rgba(255,255,255,.88)!important;box-shadow:0 14px 40px rgba(74,62,51,.07)!important;backdrop-filter:blur(14px)!important;animation:mobile-rise .55s cubic-bezier(.2,.7,.2,1) both}
+ .mobile-summary-card__head{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:12px!important;padding-bottom:16px!important;border-bottom:1px solid #eee9e5!important}
+ .mobile-summary-card__head div{display:grid!important;gap:5px!important}.mobile-summary-card__head div span,.mobile-summary-card__grid span{color:#a09a95!important;font-size:10px!important;text-transform:uppercase!important;letter-spacing:.04em!important}.mobile-summary-card__head div strong{font-size:20px!important;letter-spacing:-.04em!important}
+ .mobile-summary-card__status{flex:none!important;padding:6px 9px!important;border-radius:999px!important;background:#e7f5ed!important;color:#35b27a!important;font-size:11px!important;font-weight:700!important}
+ .mobile-summary-card__grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:14px 18px!important;padding-top:16px!important}.mobile-summary-card__grid>div{display:grid!important;gap:5px!important;min-width:0!important}.mobile-summary-card__grid strong{font-size:12px!important;line-height:1.45!important;overflow-wrap:anywhere!important}.mobile-summary-card__grid strong i{display:inline-grid!important;place-items:center!important;width:20px!important;height:20px!important;margin-right:4px!important;border-radius:50%!important;background:#2f5bf0!important;color:#fff!important;font-style:normal!important;font-size:10px!important}.mobile-summary-card__grid strong b{color:#aaa!important;font-weight:400!important}
+ .mobile-summary-card__address{grid-column:1/-1!important}.mobile-summary-card__address strong{font-size:12px!important;font-weight:550!important}
+ .mobile-tracking-details{display:grid!important;position:absolute!important;left:16px!important;right:16px!important;top:390px!important;gap:12px!important}
+ .mobile-card{margin:0!important;padding:20px!important;border:1px solid rgba(100,92,86,.09)!important;border-radius:20px!important;background:rgba(255,255,255,.84)!important;box-shadow:0 14px 40px rgba(74,62,51,.07)!important;backdrop-filter:blur(14px)!important;animation:mobile-rise .55s cubic-bezier(.2,.7,.2,1) both}
+ .mobile-card:nth-child(2){animation-delay:.08s}
+ .mobile-card h2{margin:0 0 16px!important;font-size:16px!important;font-weight:700!important;letter-spacing:-.02em!important}
+ .mobile-timeline{display:grid!important;gap:0!important}
+ .mobile-timeline article{display:grid!important;grid-template-columns:94px 1fr!important;gap:10px!important;position:relative!important;padding:0 0 20px!important}
+ .mobile-timeline article:not(:last-child)::before{content:"";position:absolute;left:78px;top:12px;bottom:-2px;width:1px;background:linear-gradient(#35b27a,#d8d0c9)}
+ .mobile-timeline article::after{content:"";position:absolute;left:72px;top:4px;width:11px;height:11px;border-radius:50%;background:#35b27a;border:3px solid #fff;box-shadow:0 0 0 1px rgba(53,178,122,.55)}
+ .mobile-timeline article.is-current::after{background:#ee7b45;box-shadow:0 0 0 1px #ee7b45,0 0 0 7px rgba(238,123,69,.08)}
+ .mobile-timeline time{font-size:11px!important;color:#918c87!important;line-height:1.35!important}
+ .mobile-timeline strong,.mobile-timeline span{display:block!important;font-size:13px!important;line-height:1.45!important}
+ .mobile-timeline strong{font-weight:650!important}.mobile-timeline span{margin-top:4px!important;color:#918c87!important}
+ .mobile-estimate{display:flex!important;justify-content:space-between!important;gap:12px!important;margin:0!important;padding-top:14px!important;border-top:1px solid #eee9e5!important;font-size:12px!important}
+ .mobile-estimate span{color:#918c87!important}.mobile-estimate strong{font-size:13px!important}
+ .mobile-facts{display:grid!important;grid-template-columns:1fr 1fr!important;gap:14px 18px!important;margin:0!important}
+ .mobile-parcel-layout{display:grid!important;grid-template-columns:92px 1fr!important;align-items:center!important;gap:10px!important}
+ .mobile-parcel-box{width:92px!important;height:150px!important}
+ .mobile-parcel-card .mobile-facts{gap:10px 8px!important}.mobile-parcel-card .mobile-facts dd{font-size:11px!important}
+ .mobile-truck-card{display:block!important;position:absolute!important;left:16px!important;top:1570px!important;width:calc(100% - 32px)!important;padding:18px!important;border:1px solid rgba(100,92,86,.09)!important;border-radius:20px!important;background:rgba(255,255,255,.88)!important;box-shadow:0 14px 40px rgba(74,62,51,.07)!important;animation:mobile-rise .55s .2s cubic-bezier(.2,.7,.2,1) both}
+ .mobile-truck-card__head{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;padding-bottom:14px!important;border-bottom:1px solid #eee9e5!important}
+ .mobile-truck-card__brand{height:82px!important;margin:-18px -18px 14px!important;padding:10px 18px!important;border-radius:20px 20px 0 0!important;background:#f3f0ec!important;display:flex!important;align-items:flex-end!important;justify-content:flex-start!important;overflow:hidden!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-size:52px!important;font-weight:500!important;letter-spacing:-4px!important}
+ .mobile-truck-card__head div,.mobile-truck-card__grid div{display:grid!important;gap:4px!important}.mobile-truck-card__head span,.mobile-truck-card__grid span{color:#a09a95!important;font-size:10px!important;text-transform:uppercase!important;letter-spacing:.04em!important}.mobile-truck-card__head strong{font-size:20px!important}.mobile-truck-card__state{padding:6px 9px!important;border-radius:999px!important;background:#e7f5ed!important;color:#35b27a!important;font-size:11px!important;font-weight:700!important}
+ .mobile-truck-card__grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;padding-top:14px!important}.mobile-truck-card__grid strong{font-size:12px!important}
+ .mobile-truck-card__actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:14px!important}.mobile-truck-card__actions a{display:grid!important;height:42px!important;place-items:center!important;border-radius:12px!important;background:#E0BD91!important;color:#171717!important;text-decoration:none!important;font-size:12px!important;font-weight:700!important}.mobile-truck-card__actions a:last-child{background:#f2eee9!important;color:#171717!important}
+ .mobile-facts div{min-width:0!important}.mobile-facts dt{color:#a09a95!important;font-size:10px!important;text-transform:uppercase!important;letter-spacing:.04em!important}.mobile-facts dd{margin:5px 0 0!important;font-size:13px!important;font-weight:550!important;overflow-wrap:anywhere!important}
+ .tracking-map{display:none!important}
+ .tracking-map-mobile-clone{display:block!important;position:absolute!important;left:12px!important;top:50px!important;width:calc(100% - 24px)!important;height:390px!important;border-radius:14px!important;overflow:hidden!important;background:#f5f3ef!important}
+ .tracking-map-mobile-clone svg{width:100%!important;height:100%!important;position:absolute!important;inset:0!important}
+ @media(prefers-reduced-motion:reduce){.tracking-status,.mobile-card,.tracking-map{animation:none!important}}
+ .mobile-tracking-actions{display:grid!important;position:absolute!important;left:16px!important;right:16px!important;top:1030px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .mobile-tracking-actions a{display:flex!important;min-width:0!important;height:48px!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:0 8px!important;border:1px solid rgba(100,92,86,.10)!important;border-radius:14px!important;background:#fff!important;box-shadow:0 10px 26px rgba(74,62,51,.06)!important;color:#171717!important;text-decoration:none!important}
+ .mobile-tracking-actions a span{display:grid!important;width:24px!important;height:24px!important;place-items:center!important;border-radius:50%!important;background:#E0BD91!important;color:#171717!important;font-size:12px!important;font-weight:700!important}
+ .mobile-tracking-actions a strong{font-size:10px!important;line-height:1.1!important;text-align:center!important}
+ .mobile-map-card{display:block!important;position:absolute!important;left:16px!important;top:1090px!important;width:calc(100% - 32px)!important;height:454px!important;padding:12px!important;border:1px solid rgba(100,92,86,.08)!important;border-radius:22px!important;background:#fff!important;box-shadow:0 18px 44px rgba(74,62,51,.08)!important;animation:mobile-rise .65s .16s cubic-bezier(.2,.7,.2,1) both}
+ .tracking-map::before{content:"Live route";position:absolute;left:14px!important;right:14px!important;top:-54px!important;height:34px!important;display:flex!important;align-items:center!important;padding:0 12px!important;border:1px solid rgba(100,92,86,.08)!important;border-radius:12px!important;background:rgba(255,255,255,.94)!important;box-shadow:0 8px 24px rgba(74,62,51,.06)!important;font-size:12px!important;font-weight:700!important;z-index:3!important}
+ .mobile-map-card::before{content:"Live route";position:absolute;left:12px!important;right:12px!important;top:12px!important;height:30px!important;display:flex!important;align-items:center!important;padding:0 10px!important;border-radius:10px!important;background:rgba(255,255,255,.94)!important;font-size:11px!important;font-weight:700!important;z-index:4!important}
+ .tracking-map::after{content:"Live";position:absolute;left:14px;top:14px;padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px rgba(74,62,51,.08);font-size:11px;font-weight:700}
+}
+.mobile-tracking-details,.mobile-summary-card,.mobile-truck-card,.mobile-tracking-actions,.mobile-map-card{display:none}</style>
 </head>
 <body>
-  <div class="subpage">
-    <div class="subpage__nav"><nav class="nav" aria-label="Main navigation"><a href="index.html" class="logo"><svg class="logo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg><span>Movere</span></a><ul class="nav__links" id="nav-links"><li><a href="index.html">Home</a></li><li><a href="services.html">Services</a></li><li><a href="tracking.html">Tracking</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="about.html">About Us</a></li><li class="nav__mobile-only"><a href="#contact" class="btn-pill">Contact Us</a></li></ul><div class="nav__right"><button class="lang" type="button" aria-label="Language">EN</button><a href="#contact" class="btn-pill nav__contact">Contact Us</a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav></div>
-    <header class="page-hero"><div class="page-hero__image" role="img" aria-label="Truck on the road"></div><div class="page-hero__inner"><p class="eyebrow">Shipment Tracking</p><h1>Know exactly where it is.</h1><p>Enter your tracking code for the latest available shipment update.</p></div></header>
-    <main><section class="page-section"><div class="page-section__inner"><div class="tracking-panel"><form id="tracking-page-form"><label class="sr-only" for="tracking-page-code">Tracking code</label><input id="tracking-page-code" name="tracking-code" type="text" placeholder="Enter tracking code" autocomplete="off" required><button type="submit" aria-label="Track shipment">→</button></form><p class="tracking-result" id="tracking-page-status" role="status" aria-live="polite"></p></div></div></section>
-    <section class="page-section page-section--tinted" id="faq"><div class="page-section__inner"><div class="page-section__head"><div><p class="eyebrow">Tracking FAQ</p><h2>Answers about shipment updates.</h2></div></div><div class="faq-list"><details><summary>Where do I find my tracking code?</summary><p>Your tracking code appears on the booking confirmation or shipping document sent by Movere.</p></details><details><summary>How often are tracking updates refreshed?</summary><p>Updates are added whenever a shipment reaches a new scan point or status milestone.</p></details><details><summary>Why is my tracking code not showing updates?</summary><p>New shipments may take a short time to appear after dispatch. Confirm the code and try again later.</p></details><details><summary>Can I track an international shipment?</summary><p>Yes. International shipments remain visible while customs, transfer, and final delivery scans are available.</p></details><details><summary>Who can I contact for more help?</summary><p>Our support team can investigate delays or missing scans using your tracking code and delivery address.</p></details></div></div></section></main>
+<div id="tracking-error" role="alert" hidden style="position:fixed;inset:0;display:grid;place-items:center;padding:24px;text-align:center;font-size:16px"></div>
+<div id="stage" hidden style="background:radial-gradient(ellipse 50% 40% at 50% 100%,#f3dede,transparent 70%),linear-gradient(135deg,#fbfbfb,#f1eded)">
+
+  <!-- header -->
+  <div class="tracking-logo abs flex items-center justify-center rounded-[22px]" style="left:27px;top:28px;width:75px;height:75px;background:#E0BD91">
+    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/>
+      <path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/>
+      <path d="m7.8 4.8 8.5 4.6"/>
+    </svg>
   </div>
-  <footer class="footer"><div class="footer__inner"><div class="footer__top"><div class="footer__brand"><a href="index.html" class="logo"><svg class="logo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg><span>Movere</span></a><p class="footer__about">Reliable freight and logistics solutions for businesses moving goods across local and global markets.</p></div><nav class="footer__cols"><div><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="services.html">Services</a></li><li><a href="pricing.html">Pricing</a></li></ul></div><div><h3>Resources</h3><ul><li><a href="tracking.html">Track Shipment</a></li><li><a href="#faq">FAQ</a></li><li><a href="index.html#testimonials">Case Studies</a></li></ul></div><div><h3>Support</h3><ul><li><a href="mailto:info@cadence.com">Email Us</a></li><li><a href="tel:+000000000000">Call Support</a></li><li><a href="index.html#contact">Contact Us</a></li></ul></div></nav></div><div class="footer__bottom"><p>© 2026 Movere. All rights reserved.</p><p class="footer__legal"><a href="#">Privacy Policy</a><a href="#">Terms Of Service</a></p></div></div><div class="footer__word" aria-hidden="true">Movere</div></footer>
-  <script src="script.js?v=2"></script><script>
-    document.getElementById('tracking-page-form').addEventListener('submit', function(event){ event.preventDefault(); const code=document.getElementById('tracking-page-code').value.trim(); document.getElementById('tracking-page-status').textContent=code ? 'Tracking '+code+'. Shipment details will appear here.' : 'Please enter a tracking code.'; });
-  </script>
+  <div class="tracking-country abs lbl" style="left:134px;top:36px">Worldwide Logistics</div>
+  <div class="tracking-brand abs" style="left:134px;top:58px;font-size:32px;line-height:40px">Movere</div>
+  <svg class="abs ic" style="left:304px;top:50px;stroke:#777" viewBox="0 0 24 24"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg>
+  <div class="tracking-header-pattern abs dots" style="left:701px;top:50px;width:242px;height:26px"></div>
+  <div class="abs" style="left:970px;top:53px;font-size:18px;color:#777">Client ID</div>
+  <div class="abs flex items-center justify-center rounded-full text-white" style="left:1047px;top:56px;width:21px;height:21px;background:#666;font-size:13px">?</div>
+
+  <div class="tracking-header-actions wrap" style="right:0;top:0;height:120px">
+  <div class="abs pill" style="left:1655px;top:33px;width:138px;height:65px"></div>
+  <svg class="abs" style="left:1678px;top:51px" width="30" height="30" viewBox="0 0 30 30"><path d="M5 25V11M12 25V5M19 25V14M26 25V9" stroke="#35b27a" stroke-width="3" stroke-linecap="round"/></svg>
+  <svg class="abs ic" style="left:1747px;top:51px;stroke:#d8372c;width:30px;height:30px" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/></svg>
+  <div class="abs pill" style="left:1819px;top:33px;width:142px;height:65px"></div>
+  <div class="abs rounded-full" style="left:1830px;top:41px;width:55px;height:55px;background:radial-gradient(circle at 50% 35%,#f1c27a 0 30%,#d99a3a 32% 60%,#7a4a1b 62%)"></div>
+  <svg class="abs" style="left:1912px;top:55px" width="20" height="20"><g fill="#222"><circle cx="4" cy="4" r="2.3"/><circle cx="16" cy="4" r="2.3"/><circle cx="4" cy="16" r="2.3"/><circle cx="16" cy="16" r="2.3"/></g></svg>
+  </div>
+
+  <!-- sidebar -->
+  <div class="tracking-sidebar">
+  <div class="abs rounded-2xl" style="left:43px;top:157px;width:44px;height:44px;background:#efeeee"></div>
+  <svg class="abs" style="left:54px;top:168px" width="22" height="22" viewBox="0 0 22 22"><path d="M3 10l8-7 8 7v9H3z" fill="#d8372c"/></svg>
+  <svg class="abs ic" style="left:53px;top:232px" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v6H3zM3 13h5l1 3h6l1-3h5"/></svg>
+  <div class="abs rounded-full" style="left:77px;top:231px;width:7px;height:7px;background:var(--red)"></div>
+  <svg class="abs ic" style="left:53px;top:291px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
+  <svg class="abs ic" style="left:53px;top:350px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+  </div>
+
+  <!-- shipment info -->
+  <div class="tracking-status abs rounded-full" style="left:134px;top:143px;padding:3px 14px;background:#e6f5ec;color:var(--green);font-size:17px">In Progress</div>
+  <div class="tracking-number abs dot" style="left:134px;top:184px;font-size:50px;line-height:62px;letter-spacing:1px;white-space:nowrap">NP 421 2441 5551</div>
+  <svg class="abs ic" style="left:519px;top:204px;width:22px;height:22px" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+  <div class="tracking-id abs" style="left:134px;top:255px;font-size:18px"><span style="color:var(--mute)">Tracking ID:</span> <span style="color:var(--red)">8pnp2qn2h2034hjf</span></div>
+  <svg class="abs ic" style="left:388px;top:255px;width:22px;height:22px;stroke:var(--red)" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+
+  <div class="tracking-time-label abs lbl" style="left:134px;top:327px">Time</div>
+  <div class="tracking-time-value abs val" style="left:134px;top:350px">12 Jan 2024, 15:50</div>
+  <div class="tracking-courier-label abs lbl" style="left:319px;top:327px">Courier</div>
+  <div class="tracking-courier-badge abs rounded-full flex items-center justify-center text-white" style="left:319px;top:351px;width:21px;height:21px;background:#2f5bf0;font-size:12px">j</div>
+  <div class="tracking-courier-value abs val" style="left:344px;top:350px">JUSTIN <span style="color:#aaa;font-size:14px">↗</span></div>
+  <div class="tracking-address-label abs lbl" style="left:134px;top:393px">Delivery Address</div>
+  <div class="tracking-address-value abs val" style="left:134px;top:416px;line-height:21px">Vulytsya Tarasa Shevchenka, 1Б, Vyzhnytsya,<br>Chernivtsi Oblast, Ukraine, 59200</div>
+  <div class="tracking-item-label abs lbl" style="left:134px;top:480px">Item</div>
+  <div class="tracking-item-value abs val" style="left:134px;top:503px">Children's cartoon quartz watch</div>
+
+  <section class="mobile-summary-card" aria-label="Shipment summary">
+    <div class="mobile-summary-card__head">
+      <div><span>Shipment</span><strong>NP 421 2441 5551</strong></div>
+      <span class="mobile-summary-card__status">In Progress</span>
+    </div>
+    <div class="mobile-summary-card__grid">
+      <div><span>Tracking ID</span><strong>8pnp2qn2h2034hjf</strong></div>
+      <div><span>Time</span><strong>12 Jan 2024, 15:50</strong></div>
+      <div><span>Courier</span><strong><i>j</i> JUSTIN <b>↗</b></strong></div>
+      <div><span>Item</span><strong>Children's cartoon quartz watch</strong></div>
+      <div class="mobile-summary-card__address"><span>Delivery Address</span><strong>Vulytsya Tarasa Shevchenka, 1Б, Vyzhnytsya,<br>Chernivtsi Oblast, Ukraine, 59200</strong></div>
+    </div>
+  </section>
+
+  <div class="tracking-status-flow">
+  <div class="tracking-status-title abs" style="left:134px;top:578px;font-size:25px">Status</div>
+  <div class="abs" style="left:230px;top:660px;width:2px;height:190px;background:linear-gradient(#35b27a 0 40%,#35b27a 40% 55%,transparent 55%)"></div>
+  <div class="abs" style="left:230px;top:775px;width:0;height:80px;border-left:2px dashed var(--orange)"></div>
+  <div class="abs rounded-full" style="left:222px;top:641px;width:17px;height:17px;background:var(--green)"></div>
+  <div class="abs rounded-full" style="left:222px;top:706px;width:17px;height:17px;background:var(--green)"></div>
+  <div class="abs rounded-full" style="left:222px;top:771px;width:17px;height:17px;background:var(--orange)"></div>
+  <div class="abs rounded-full" style="left:221px;top:848px;width:20px;height:20px;background:#555"></div>
+  <div class="abs val" style="left:134px;top:638px;line-height:22px">12 Jan<br><span class="lbl" style="font-size:15px">15:16</span></div>
+  <div class="abs val" style="left:134px;top:703px;line-height:22px">13 Jan<br><span class="lbl" style="font-size:15px">11:11</span></div>
+  <div class="abs val" style="left:134px;top:768px;line-height:22px">13 Jan<br><span class="lbl" style="font-size:15px">18:24</span></div>
+  <div class="abs val" style="left:274px;top:638px;line-height:22px">Delivery order created<br><span class="lbl" style="font-size:15px">thefinals.com</span></div>
+  <div class="abs val" style="left:274px;top:700px;line-height:21px">JUSTIN created order<br>label and update for 5 Pages</div>
+  <div class="abs val" style="left:274px;top:770px">In transit to destination</div>
+  <div class="abs val" style="left:274px;top:847px">Estimated delivery 11 Jan 2025</div>
+  </div>
+
+  <!-- parcel diagram -->
+  <div class="tracking-parcel">
+  <div class="abs lbl" style="left:134px;top:935px">Sender</div><div class="abs tracking-sender-value" style="left:134px;top:962px;width:145px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+  <div class="abs lbl" style="left:134px;top:990px">Receiver</div><div class="abs tracking-receiver-value" style="left:134px;top:1017px;width:145px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+  <div class="abs lbl" style="left:134px;top:1045px">Unique ID</div><div class="abs tracking-unique-id-value dot" style="left:134px;top:1072px;width:145px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+  <svg class="abs" style="left:225px;top:930px" width="270" height="170" viewBox="0 0 270 170" fill="none" stroke="#222" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M5 28l32 18M5 83h32M5 125l32-18M270 28l-32 18M270 83h-32" stroke="#555"/>
+    <path d="M235 125l-32-18" stroke="#555"/>
+    <path d="M136 36l55 30v68l-55 30-55-30V66z" stroke-width="3"/><path d="M81 66l55 28 55-28M136 94v70" stroke-width="3"/>
+  </svg>
+  <div class="abs lbl" style="left:477px;top:934px">Weight</div><div class="abs val" style="left:477px;top:957px">51 kg</div>
+  <div class="abs lbl" style="left:477px;top:990px">Size</div><div class="abs val" style="left:477px;top:1012px">3.20 m³</div>
+  <div class="abs lbl" style="left:477px;top:1045px">Info</div><div class="abs val" style="left:477px;top:1067px;text-decoration:underline">Show</div>
+  <div class="abs dots" style="left:281px;top:1126px;width:130px;height:24px;background-size:6px 6px"></div>
+  </div>
+
+  <!-- map -->
+  <div class="tracking-map abs overflow-hidden" style="left:655px;top:119px;right:0;bottom:0;border-top-left-radius:34px;background:linear-gradient(135deg,#ebebed,#f0e6e6 60%,#ebe9ec)">
+    <svg width="100%" height="100%" viewBox="0 0 1335 1125" preserveAspectRatio="xMinYMin slice" style="position:absolute;inset:0">
+      <g transform="translate(-766,-326)">
+        <path d="M1250,326 L1232,385 L1160,470 L1110,535 L1055,620 L930,700 L880,800 L830,920 L790,1000 L766,1100 L800,1100 L870,1000 L920,900 L990,850 L1045,760 L1100,700 L1150,610 L1230,545 L1262,430 L1270,326Z" fill="#c4dbf0" opacity=".9"/>
+        <path d="M1550,380 q40,-40 90,-35 l40,45 -60,30 -60,-10z M2060,900 l40,-30 v200 l-45,10z M1950,1190 q-40,20 -30,60 l40,10z" fill="#cfe2f3" opacity=".85"/>
+        <g class="t">
+          <text x="960" y="347">Karlsborg</text><text x="1249" y="337">Motala</text><text x="916" y="380">Mölltorp</text><text x="842" y="408">Fagersanna</text>
+          <text x="1477" y="370">Ljungsbro</text><text x="1548" y="407">Ekängen</text><text x="1527" y="478" style="font-size:21px">Linköping</text>
+          <text x="1157" y="424">Vadstena</text><text x="1368" y="524">Mantorp</text><text x="1296" y="552">Mjölby</text>
+          <text x="1173" y="562">Väderstad</text><text x="938" y="587">Vättern</text><text x="868" y="569">Hjo</text>
+          <text x="1036" y="655">Ödeshög</text><text x="1245" y="684">Boxholm</text><text x="1565" y="743">Rimforsa</text>
+          <text x="1728" y="680">Åtvidaberg</text><text x="1848" y="730">Falerum</text><text x="2003" y="606">Gusum</text>
+          <text x="2030" y="672">Valdemar</text><text x="2048" y="693">Gällösa</text><text x="1982" y="851">Edsbruk</text><text x="1988" y="875">Helgenäs</text>
+          <text x="1212" y="845">Tranås</text><text x="1351" y="839">Malexander</text><text x="1685" y="851">Björkfors</text>
+          <text x="949" y="845">Gränna</text><text x="1135" y="877">Gripenberg</text><text x="1563" y="882">Kisa</text><text x="1550" y="901">Kärkeryd</text>
+          <text x="1123" y="935">Frinnaryd</text><text x="1690" y="945">Hycklinge</text><text x="1667" y="968">Horn</text><text x="1948" y="974">Gamleby</text>
+          <text x="1130" y="1020">Aneby</text><text x="1353" y="1043">Österbymo</text><text x="1296" y="1065">Rydsnäs</text><text x="1586" y="1064">Gullringen</text>
+          <text x="2043" y="1086">Djurgan</text><text x="1636" y="1130">Nyllinge</text><text x="1110" y="1137">Småland</text><text x="1110" y="1154">Anneberg</text>
+          <text x="1737" y="1164">Frödinge</text><text x="2009" y="1142">Gunnebo</text><text x="1067" y="1207">Nässjö</text><text x="1217" y="1197">Eksjö</text>
+          <text x="1301" y="1228">Hult</text><text x="1350" y="1220">Bruzaholm</text><text x="1837" y="1232">Totebo</text><text x="1901" y="1240">Hjorted</text>
+          <text x="1498" y="1244">Mariannelund</text><text x="1999" y="1269">Blankaholm</text><text x="1580" y="1306">Lönneberga</text>
+          <text x="1220" y="1365">Ekenässjön</text><text x="1641" y="1355">Hultsfred</text><text x="1259" y="1436">Vetlanda</text><text x="1660" y="1202">Vimmerby</text>
+        </g>
+        <g fill="none" stroke="#e5434b" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+          <polyline points="1190,706 1215,728 1245,741 1358,746 1398,722 1452,699 1475,722 1500,750 1533,729 1538,830 1572,958 1560,1010 1535,1050"/>
+          <polyline points="1572,440 1620,435 1645,412 1700,418 1800,425 1850,432 1905,478 1990,487 2030,545 2023,590 2100,605"/>
+        </g>
+        <polyline points="1560,1160 1610,1180 1660,1172" fill="none" stroke="#c9c9cc" stroke-width="3"/>
+        <circle cx="1190" cy="706" r="9" fill="#e5232b" stroke="#fff" stroke-width="2"/>
+        <circle cx="1672" cy="1173" r="9" fill="#e5232b" stroke="#fff" stroke-width="2"/>
+        <circle cx="1572" cy="440" r="4" fill="#e5232b"/>
+      </g>
+      <circle cx="756" cy="794" r="71" fill="rgba(150,150,155,.28)"/>
+      <g transform="translate(737,775)"><path d="M20 2L4 6l16 36L36 6z M20 2 20 30" fill="#1c1c1c" stroke="#1c1c1c" stroke-linejoin="round" stroke-width="2"/><path d="M20 22L6 8l14 3 14-3z" fill="#f0eaea"/></g>
+    </svg>
+  </div>
+
+  <!-- map controls -->
+  <div class="tracking-map-controls wrap" style="right:0;top:0;height:240px">
+  <div class="abs pill flex items-center justify-center" style="left:1538px;top:149px;width:60px;height:60px"><svg class="ic" viewBox="0 0 24 24" style="fill:#222"><path d="M21 3L3 10l7 3 3 7z"/></svg></div>
+  <div class="abs pill flex items-center justify-center" style="left:1609px;top:149px;width:60px;height:60px"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+  <div class="abs pill flex items-center justify-center" style="left:1678px;top:149px;width:60px;height:60px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+  <div class="abs pill" style="left:1762px;top:149px;width:197px;height:60px"></div>
+  <svg class="abs ic" style="left:1781px;top:167px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6"/></svg>
+  <svg class="abs" style="left:1838px;top:165px" width="44" height="28"><g fill="#333"><rect x="0" y="0" width="2" height="28"/><rect x="5" y="0" width="1.5" height="28"/><rect x="9" y="0" width="3" height="28"/><rect x="15" y="0" width="1.5" height="28"/><rect x="19" y="0" width="2" height="28"/><rect x="24" y="0" width="3" height="28"/><rect x="30" y="0" width="1.5" height="28"/><rect x="34" y="0" width="2" height="28"/><rect x="39" y="0" width="3" height="28"/></g></svg>
+  <svg class="abs ic" style="left:1902px;top:167px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6M11 8v6"/></svg>
+
+  </div>
+  <div class="tracking-truck-wrap wrap" style="left:0;bottom:0;height:1244px">
+  <!-- truck card -->
+  <div class="abs overflow-hidden" style="left:684px;top:778px;width:258px;height:438px;border-radius:28px;background:rgba(250,250,250,.88);box-shadow:0 6px 24px rgba(0,0,0,.08)">
+    <svg class="abs" style="left:0;top:0" width="258" height="112" viewBox="0 0 258 112">
+      <text x="116" y="72" font-size="72" font-family="Plus Jakarta Sans" fill="#222" font-weight="400" letter-spacing="-2">Nov</text>
+      <rect x="55" y="12" width="95" height="75" fill="#f3f3f3"/>
+      <path d="M52 40h20l12 12h28v32H52z" fill="#2c2c2c"/><rect x="58" y="44" width="14" height="14" fill="#6c7a82"/>
+      <rect x="50" y="26" width="20" height="14" rx="3" fill="#333"/>
+      <circle cx="68" cy="88" r="9" fill="#111"/><circle cx="116" cy="88" r="9" fill="#111"/><circle cx="68" cy="88" r="4" fill="#888"/>
+    </svg>
+    <div class="abs flex items-center" style="left:34px;top:122px;width:210px;height:12px;border-radius:99px;background:#ececec"></div>
+    <div class="abs" style="left:34px;top:126px;width:62px;height:3px;background:var(--green)"></div>
+    <div class="abs" style="left:96px;top:126px;width:58px;height:3px;background:var(--green)"></div>
+    <div class="abs" style="left:154px;top:126px;width:50px;border-top:3px dashed var(--orange)"></div>
+    <div class="abs rounded-full" style="left:30px;top:123px;width:12px;height:12px;background:var(--green)"></div>
+    <div class="abs rounded-full" style="left:86px;top:123px;width:12px;height:12px;background:var(--green)"></div>
+    <div class="abs rounded-full" style="left:144px;top:122px;width:14px;height:14px;background:var(--orange)"></div>
+    <div class="abs rounded-full" style="left:210px;top:124px;width:9px;height:9px;background:#ccc"></div>
+    <div class="abs lbl" style="left:12px;top:162px;font-size:16px">Truck Number</div>
+    <div class="abs val" style="left:12px;top:188px;font-weight:500">#H72</div>
+    <div class="abs lbl" style="left:12px;top:220px">Driver</div>
+    <div class="abs val" style="left:12px;top:246px;font-weight:500">Dariy Kuruchuk</div>
+    <div class="abs lbl" style="left:12px;top:278px">Phone</div>
+    <div class="abs val" style="left:12px;top:303px;font-weight:500">+380 68 120 91 80</div>
+    <div class="abs lbl" style="left:12px;top:334px">State</div>
+    <div class="abs val" style="left:12px;top:357px;font-weight:500;height:12px;overflow:hidden;line-height:20px">In Motion</div>
+    <div class="abs" style="left:241px;top:155px;width:3px;height:70px;border-radius:2px;background:#cfcfcf"></div>
+    <div class="abs" style="left:0;top:368px;width:258px;height:70px;background:rgba(250,250,250,.95)"></div>
+    <div class="abs pill flex items-center justify-center" style="left:14px;top:391px;width:46px;height:46px;top:381px"><svg class="ic" viewBox="0 0 24 24" style="fill:#222"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+    <div class="abs pill flex items-center justify-center" style="left:62px;top:381px;width:46px;height:46px"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+    <div class="abs pill flex items-center justify-center" style="left:196px;top:381px;width:46px;height:46px"><svg class="ic" viewBox="0 0 24 24" style="width:28px"><path d="M3 12h17M15 7l5 5-5 5"/></svg></div>
+  </div>
+
+  </div>
+  <div class="tracking-chat-wrap wrap" style="right:0;bottom:0;height:1244px">
+  <!-- chat -->
+  <div class="abs pill flex items-center" style="left:1777px;top:1145px;width:182px;height:72px">
+    <div class="rounded-full" style="margin-left:10px;width:52px;height:52px;background:radial-gradient(circle at 50% 38%,#f2d6c2 0 30%,#3b2f2a 32% 55%,#d9d9d9 57%)"></div>
+    <div style="margin-left:26px;font-size:17px;line-height:21px;color:#333">Have a<br>Question?</div>
+  </div>
+  </div>
+
+  <div class="mobile-tracking-details">
+    <section class="mobile-card"><h2>Status</h2>
+      <div class="mobile-timeline">
+        <article><time>12 Jan · 15:16</time><div><strong>Delivery order created</strong><span>thefinals.com</span></div></article>
+        <article><time>13 Jan · 11:11</time><div><strong>JUSTIN created order</strong><span>label and update for 5 Pages</span></div></article>
+        <article class="is-current"><time>13 Jan · 18:24</time><div><strong>In transit to destination</strong></div></article>
+      </div>
+      <p class="mobile-estimate"><span>Estimated delivery</span><strong>11 Jan 2025</strong></p>
+    </section>
+
+    <section class="mobile-card mobile-parcel-card"><h2>Parcel</h2>
+      <div class="mobile-parcel-layout">
+        <svg class="mobile-parcel-box" viewBox="0 0 220 150" role="img" aria-label="Parcel box diagram">
+          <ellipse cx="110" cy="132" rx="68" ry="12" fill="rgba(224,189,145,.08)"/>
+          <path d="M43 48 110 18l67 30-67 32z" fill="#f7f3ee" stroke="#E0BD91" stroke-width="3"/>
+          <path d="M43 48v72l67 30V80z" fill="#eee7df" stroke="#E0BD91" stroke-width="3"/>
+          <path d="M177 48v72l-67 30V80z" fill="#ddd2c6" stroke="#E0BD91" stroke-width="3"/>
+          <path d="M110 18v62M43 48l67 32 67-32" fill="none" stroke="#E0BD91" stroke-width="3"/>
+          <path d="M81 32l67 31" fill="none" stroke="#E0BD91" stroke-width="2" opacity=".55"/>
+        </svg>
+        <dl class="mobile-facts">
+        <div><dt>Sender</dt><dd>Not displayed</dd></div>
+        <div><dt>Receiver</dt><dd>Vyzhnytsya, Ukraine</dd></div>
+        <div><dt>Unique ID</dt><dd class="mobile-unique-id">8pnp2qn2h2034hjf</dd></div>
+        <div><dt>Weight</dt><dd>51 kg</dd></div>
+        <div><dt>Size</dt><dd>3.20 m³</dd></div>
+        <div><dt>Info</dt><dd>Show</dd></div>
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <nav class="mobile-tracking-actions" aria-label="Shipment actions">
+    <a href="live-map.html"><span aria-hidden="true">⌖</span><strong>Live Map</strong></a>
+    <a href="payment.html"><span aria-hidden="true">$</span><strong>Pay</strong></a>
+    <a href="support.html"><span aria-hidden="true">?</span><strong>Contact Support</strong></a>
+  </nav>
+
+  <div class="mobile-map-card" id="mobile-live-map"></div>
+
+  <section class="mobile-truck-card" aria-label="Truck details">
+    <div class="mobile-truck-card__brand" aria-label="Nov">Nov</div>
+    <div class="mobile-truck-card__head"><div><span>Truck Number</span><strong>#H72</strong></div><span class="mobile-truck-card__state">In Motion</span></div>
+    <div class="mobile-truck-card__grid">
+      <div><span>Driver</span><strong>Dariy Kuruchuk</strong></div>
+      <div><span>Phone</span><strong>+380 68 120 91 80</strong></div>
+      <div><span>State</span><strong>In Motion</strong></div>
+    </div>
+    <div class="mobile-truck-card__actions"><a href="tel:+380681209180" aria-label="Call driver">Call</a><a href="mailto:support@movere.com">Message</a></div>
+  </section>
+</div>
+
+<script>
+function mountMobileMap(){
+ var frame=document.querySelector('.mobile-map-card');
+ var source=document.querySelector('.tracking-map');
+ if(!frame || !source) return;
+ var existing=frame.querySelector('.tracking-map-mobile-clone');
+ if(innerWidth<=768){
+  if(!existing){var clone=source.cloneNode(true);clone.removeAttribute('style');clone.className='tracking-map-mobile-clone';frame.appendChild(clone)}
+ }else if(existing){existing.remove()}
+}
+function fit(){
+ var e=document.getElementById('stage');
+ mountMobileMap();
+ if(innerWidth<=768){e.style.width='100%';e.style.height='1760px';e.style.transform='none';e.style.left='0';e.style.top='0';return}
+ var s=Math.min(innerWidth/1990,innerHeight/1244);
+ e.style.width=innerWidth/s+'px';e.style.height=innerHeight/s+'px';e.style.transform='scale('+s+')';e.style.left='0';e.style.top='0';
+}
+addEventListener('resize',fit);fit();
+
+function displayDate(value, options){
+ var date=new Date(value.replace(' ','T'));
+ return new Intl.DateTimeFormat('en-GB',options).format(date);
+}
+function setText(element,value){if(element)element.textContent=value==null?'':String(value)}
+function setEventBlock(element,event){
+ if(!element)return;
+ element.replaceChildren(document.createTextNode(event.title));
+ if(event.description){
+  var detail=document.createElement('span');
+  detail.className='lbl';detail.style.fontSize='15px';detail.textContent=event.description;
+  element.append(document.createElement('br'),detail);
+ }
+}
+function renderShipment(shipment){
+ setText(document.querySelector('.tracking-status'),shipment.status);
+ setText(document.querySelector('.tracking-number'),shipment.shipment_number);
+ setText(document.querySelector('.tracking-id span:last-child'),shipment.tracking_code);
+ setText(document.querySelector('.tracking-time-value'),displayDate(shipment.last_updated,{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}));
+ setText(document.querySelector('.tracking-courier-value'),shipment.courier_name);
+ setText(document.querySelector('.tracking-address-value'),shipment.delivery_address);
+ setText(document.querySelector('.tracking-item-value'),shipment.item_description);
+
+ var timeline=document.querySelectorAll('.tracking-status-flow .abs.val');
+ shipment.events.forEach(function(event,index){
+  if(index<3&&timeline[index]){
+   var date=new Date(event.occurred_at.replace(' ','T'));
+   var monthDay=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(date);
+   var time=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(date);
+   var timeLabel=document.createElement('span');timeLabel.className='lbl';timeLabel.style.fontSize='15px';timeLabel.textContent=time;
+   timeline[index].replaceChildren(document.createTextNode(monthDay),document.createElement('br'),timeLabel);
+   setEventBlock(timeline[index+3],event);
+  }
+ });
+ if(timeline[6])setText(timeline[6],'Estimated delivery '+displayDate(shipment.estimated_delivery+'T00:00:00',{day:'numeric',month:'short',year:'numeric'}));
+
+ var mobileSummary=document.querySelector('.mobile-summary-card__grid');
+ if(mobileSummary){
+  var summary=mobileSummary.querySelectorAll(':scope > div');
+  setText(summary[0]&&summary[0].querySelector('strong'),shipment.tracking_code);
+  setText(summary[1]&&summary[1].querySelector('strong'),displayDate(shipment.last_updated,{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}));
+  setText(summary[2]&&summary[2].querySelector('strong'),shipment.courier_name);
+  setText(summary[3]&&summary[3].querySelector('strong'),shipment.item_description);
+  setText(summary[4]&&summary[4].querySelector('strong'),shipment.delivery_address);
+ }
+ setText(document.querySelector('.mobile-summary-card__head strong'),shipment.shipment_number);
+ setText(document.querySelector('.mobile-summary-card__status'),shipment.status);
+
+ var mobileEvents=document.querySelectorAll('.mobile-timeline article');
+ shipment.events.forEach(function(event,index){
+  var article=mobileEvents[index];if(!article)return;
+  setText(article.querySelector('time'),displayDate(event.occurred_at,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).replace(',',' ·'));
+  setText(article.querySelector('strong'),event.title);
+  var description=article.querySelector('span');
+  if(description){setText(description,event.description);description.hidden=!event.description}
+  article.classList.toggle('is-current',event.state==='current');
+ });
+ setText(document.querySelector('.mobile-estimate strong'),displayDate(shipment.estimated_delivery+'T00:00:00',{day:'numeric',month:'short',year:'numeric'}));
+
+ var facts=document.querySelectorAll('.mobile-facts dd');
+ [shipment.sender,shipment.receiver,shipment.unique_id,shipment.weight_kg+' kg',shipment.size_m3+' m³',shipment.parcel_info].forEach(function(value,index){setText(facts[index],value)});
+ var shipmentDetailValues=[
+  ['.tracking-sender-value',shipment.sender],
+  ['.tracking-receiver-value',shipment.receiver],
+  ['.tracking-unique-id-value',shipment.unique_id]
+ ];
+ shipmentDetailValues.forEach(function(entry){
+  var element=document.querySelector(entry[0]);
+  setText(element,entry[1]);
+  if(element)element.title=entry[1];
+ });
+ var parcelValues=document.querySelectorAll('.tracking-parcel .val');
+ [shipment.weight_kg+' kg',shipment.size_m3+' m³',shipment.parcel_info].forEach(function(value,index){setText(parcelValues[index],value)});
+ var truckValues=document.querySelectorAll('.tracking-truck-wrap .abs.val');
+ [shipment.truck_number,shipment.driver_name,shipment.driver_phone,shipment.truck_state].forEach(function(value,index){setText(truckValues[index],value)});
+ var mobileTruck=document.querySelector('.mobile-truck-card');
+ if(mobileTruck){
+  setText(mobileTruck.querySelector('.mobile-truck-card__head strong'),shipment.truck_number);
+  setText(mobileTruck.querySelector('.mobile-truck-card__state'),shipment.truck_state);
+  var truckDetails=mobileTruck.querySelectorAll('.mobile-truck-card__grid strong');
+  [shipment.driver_name,shipment.driver_phone,shipment.truck_state].forEach(function(value,index){setText(truckDetails[index],value)});
+  var callLink=mobileTruck.querySelector('a[href^="tel:"]');
+  if(callLink)callLink.href='tel:'+shipment.driver_phone.replace(/[^+\d]/g,'');
+ }
+}
+
+(async function loadShipment(){
+ var params=new URLSearchParams(window.location.search);
+ var trackingCode=params.has('code')?params.get('code'):'8pnp2qn2h2034hjf';
+ var stage=document.getElementById('stage');
+ var error=document.getElementById('tracking-error');
+ try{
+  var response=await fetch('tracking-api.php?code='+encodeURIComponent(trackingCode));
+  var result=await response.json();
+  if(!response.ok)throw new Error(result.error||'Unable to find this shipment.');
+  renderShipment(result.shipment);
+  stage.hidden=false;
+  fit();
+ }catch(requestError){
+  error.textContent=requestError.message==='Failed to fetch'?'Could not connect to the tracking service. Make sure MAMP is running.':requestError.message;
+  error.hidden=false;
+ }
+})();
+</script>
 </body>
 </html>
