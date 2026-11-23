@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadence — Worldwide Shipping. Handled Perfectly.</title>
+  <meta name="description" content="Cadence is a premium international logistics and shipping company.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+    HERO LAYERS (bottom to top):
+      1. .hero__bg      -> your trailer + sunset photo:  assets/images/hero.jpg
+      2. .hero__word    -> oversized "Cadence" wordmark
+      3. .hero__truck   -> OPTIONAL transparent PNG cut-out of your truck: assets/images/hero-truck.png
+                           Add it (and add the class "hero--layered" to <header class="hero">) to get the
+                           "wordmark partly hidden behind the truck" effect exactly as in the reference.
+      4. nav + headline + CTA
+  -->
+  <header class="hero" id="home">
+    <div class="hero__slides" aria-label="Featured logistics images">
+      <div class="hero__slide hero__slide--container is-active" role="img" aria-label="Container truck on a highway at sunset"></div>
+      <div class="hero__slide hero__slide--equipment" role="img" aria-label="Heavy equipment being transported by truck" aria-hidden="true"></div>
+    </div>
+    <div class="hero__word" aria-hidden="true">Cadence</div>
+    <div class="hero__truck" aria-hidden="true"></div>
+
+    <div class="hero__controls" role="group" aria-label="Hero image controls">
+      <button class="hero__arrow" id="hero-prev" type="button" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <div class="hero__dots" role="group" aria-label="Choose an image">
+        <button class="hero__dot is-active" type="button" aria-label="Show image 1" aria-current="true"></button>
+        <button class="hero__dot" type="button" aria-label="Show image 2" aria-current="false"></button>
+      </div>
+      <button class="hero__arrow" id="hero-next" type="button" aria-label="Next image">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#home" class="logo" aria-label="Cadence home">
+        <svg class="logo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+          <path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/>
+          <path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/>
+          <path d="m7.8 4.8 8.5 4.6"/>
+        </svg>
+        <span>Cadence</span>
+      </a>
+
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#tracking">Tracking</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li class="nav__mobile-only"><a href="#contact" class="btn-pill">Contact Us</a></li>
+      </ul>
+
+      <div class="nav__right">
+        <button class="lang" type="button" aria-label="Select language">
+          <svg width="8" height="6" viewBox="0 0 8 6" aria-hidden="true"><path d="M0 0h8L4 6z" fill="currentColor"/></svg>
+          EN
+        </button>
+        <a href="#contact" class="btn-pill nav__contact">Contact Us</a>
+        <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="hero__content">
+      <h1 class="hero__title">Worldwide Shipping. Handled Perfectly.</h1>
+      <a href="#contact" class="cta">
+        <span class="cta__label">Contact Us</span>
+        <span class="cta__icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5l7-7M4.5 3.5h6v6"/></svg>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="why" id="about" aria-labelledby="why-title">
+      <div class="why__inner">
+
+        <figure class="why__media">
+          <div class="why__img" role="img" aria-label="White semi truck driving on a sunny highway"></div>
+
+          <figcaption class="testimonial">
+            <p class="testimonial__quote">“Cadence moves thousands of shipments fast and reliably with full visibility.”</p>
+            <div class="testimonial__person">
+              <div>
+                <strong>Arash Patel</strong>
+                <span>Supply Chain Director</span>
+              </div>
+              <!-- Replace by dropping your image at assets/images/avatar.jpg -->
+              <div class="avatar" role="img" aria-label="Portrait of Arash Patel"></div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <div class="why__text">
+          <div>
+            <p class="eyebrow">Why Choose Us</p>
+            <h2 id="why-title">Why Top Businesses Prefer Cadence for Their Success</h2>
+          </div>
+
+          <dl class="stats">
+            <div class="stat">
+              <dt>2M+</dt>
+              <dd>Shipments Delivered</dd>
+            </div>
+            <div class="stat">
+              <dt>120+</dt>
+              <dd>Countries Connected</dd>
+            </div>
+            <div class="stat">
+              <dt>98%</dt>
+              <dd>On-Time Delivery Rate</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TRUSTED BY INDUSTRY LEADERS -->
+    <section class="trusted" id="services" aria-labelledby="trusted-title">
+      <div class="trusted__inner">
+        <p class="eyebrow eyebrow--center">Trusted by Industry Leaders</p>
+        <h2 id="trusted-title" class="section-title section-title--center">From Manufacturers To Fast-Growing Brands, Organizations Trust Cadence To Simplify Shipping And Deliver Confidently At Scale.</h2>
+
+        <!-- Brand names are plain text placeholders: swap each for your client's own logo file if you have it -->
+        <ul class="logos" aria-label="Companies that trust Cadence">
+          <li class="logo-card"><span class="brand brand--himalayas">himalayas</span></li>
+          <li class="logo-card"><span class="brand brand--amazon">amazon</span></li>
+          <li class="logo-card"><span class="brand brand--microsoft">Microsoft</span></li>
+          <li class="logo-card"><span class="brand brand--shopify">shopify</span></li>
+          <li class="logo-card"><span class="brand brand--tesla">TESLA</span></li>
+        </ul>
+
+        <a href="#contact" class="cta cta--center">
+          <span class="cta__label">Contact Us</span>
+          <span class="cta__icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5l7-7M4.5 3.5h6v6"/></svg>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- INSIGHTS & RESOURCES -->
+    <section class="insights" id="insights" aria-labelledby="insights-title">
+      <div class="insights__head">
+        <p class="eyebrow eyebrow--center">Insights &amp; Resources</p>
+        <h2 id="insights-title" class="section-title section-title--center section-title--sm">Smart logistics insights to keep you moving.</h2>
+      </div>
+
+      <!-- Background photo: assets/images/insights-bg.jpg -->
+      <div class="insights__stage">
+        <article class="post post--image">
+          <div class="post__img" role="img" aria-label="Semi truck driving on a highway at sunset">
+            <span class="post__tag">Shipping Guide</span>
+            <span class="post__dot" aria-hidden="true"></span>
+          </div>
+          <div class="post__body">
+            <p class="post__cat">Last-Mile Delivery</p>
+            <h3 class="post__title">Affordable Last-Mile Delivery</h3>
+            <p class="post__text">Explore strategies to enhance delivery speed, cut costs, and improve customer experience with smarter last-mile logistics.</p>
+          </div>
+        </article>
+
+        <article class="post post--text">
+          <p class="post__cat">Supply Chain Management</p>
+          <h3 class="post__title">5 Supply Chain Trends for Growth</h3>
+          <p class="post__text">Explore the technologies and operational strategies reshaping modern supply chains, from real-time tracking to AI-powered logistics planning.</p>
+          <a href="#insights" class="more">
+            <span>Read More</span>
+            <span class="more__icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5l7-7M4.5 3.5h6v6"/></svg>
+            </span>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- CLIENT TESTIMONIALS -->
+    <section class="reviews" id="testimonials" aria-labelledby="reviews-title">
+      <div class="reviews__inner">
+        <div class="reviews__head">
+          <div>
+            <p class="eyebrow">Client Testimonials</p>
+            <h2 id="reviews-title" class="section-title section-title--sm">See why businesses trust Cadence for shipments.</h2>
+          </div>
+          <div class="reviews__nav" role="group" aria-label="Scroll testimonials">
+            <button type="button" class="reviews__btn" id="reviews-prev" aria-label="Previous testimonials">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+            </button>
+            <button type="button" class="reviews__btn" id="reviews-next" aria-label="Next testimonials">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <ul class="reviews__track" id="reviews-track">
+          <li class="review">
+            <p class="review__quote">“Cadence transformed our shipment management with real-time tracking and automated updates, reducing delays and giving full visibility from dispatch to delivery.”</p>
+            <div class="review__person">
+              <div><strong>Michael Chen</strong><span>Operations Manager</span></div>
+              <div class="avatar avatar--michael" role="img" aria-label="Portrait of Michael Chen"></div>
+            </div>
+          </li>
+          <li class="review">
+            <p class="review__quote">“We've improved delivery performance while cutting manual work significantly. Cadence is intuitive, reliable, and has become an essential part of our daily logistics operations.”</p>
+            <div class="review__person">
+              <div><strong>Sophia Carter</strong><span>Supply Chain Director</span></div>
+              <div class="avatar avatar--sophia" role="img" aria-label="Portrait of Sophia Carter"></div>
+            </div>
+          </li>
+          <li class="review">
+            <p class="review__quote">“Managing large shipments used to be a real challenge, but with Cadence, the process is smooth and straightforward. It not only simplifies the logistics but also ensures that everyone involved.”</p>
+            <div class="review__person">
+              <div><strong>John Rodriguez</strong><span>Logistics Coordinator</span></div>
+              <div class="avatar avatar--john" role="img" aria-label="Portrait of John Rodriguez"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#home" class="logo" aria-label="Cadence home">
+            <svg class="logo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+              <path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7L12 2.5Z"/>
+              <path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/>
+              <path d="m7.8 4.8 8.5 4.6"/>
+            </svg>
+            <span>Cadence</span>
+          </a>
+          <p class="footer__about">Delivering reliable freight and logistics solutions that help businesses move goods efficiently across local and global markets.</p>
+
+          <!-- Placeholder contact details: replace with your real ones -->
+          <ul class="footer__contact">
+            <li><a href="tel:+000000000000">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+              +00 000 000 0000</a></li>
+            <li><a href="mailto:info@cadence.com">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              info@cadence.com</a></li>
+            <li><a href="#contact">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg>
+              @cadence</a></li>
+          </ul>
+        </div>
+
+        <nav class="footer__cols" aria-label="Footer">
+          <div>
+            <h3>Company</h3>
+            <ul>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#about">Our Fleet</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#about">Careers</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#insights">FAQ</a></li>
+              <li><a href="#insights">Shipping Guide</a></li>
+              <li><a href="#tracking">Track Shipment</a></li>
+              <li><a href="#testimonials">Case Studies</a></li>
+              <li><a href="#contact">Support Center</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Support</h3>
+            <ul>
+              <li><a href="#insights">FAQ</a></li>
+              <li><a href="#insights">Shipping Guide</a></li>
+              <li><a href="#tracking">Track Shipment</a></li>
+              <li><a href="#testimonials">Case Studies</a></li>
+              <li><a href="#contact">Support Center</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer__bottom">
+        <p>© 2026 Cadence. All rights reserved.</p>
+        <p class="footer__legal"><a href="#">Privacy Policy</a><a href="#">Terms Of Service</a></p>
+      </div>
+    </div>
+    <div class="footer__word" aria-hidden="true">Cadence</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
